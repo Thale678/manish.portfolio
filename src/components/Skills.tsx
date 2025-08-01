@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { 
   Code, 
   Server, 
@@ -14,6 +14,32 @@ import {
 
 const Skills = () => {
   const [activeTab, setActiveTab] = useState(0);
+  const [isVisible, setIsVisible] = useState(false);
+  const sectionRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+        }
+      },
+      {
+        threshold: 0.1,
+        rootMargin: '0px 0px -100px 0px'
+      }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => {
+      if (sectionRef.current) {
+        observer.unobserve(sectionRef.current);
+      }
+    };
+  }, []);
 
   const tabs = [
     {
@@ -74,9 +100,11 @@ const Skills = () => {
   ];
 
   return (
-    <section id="skills" className="py-20 bg-white">
+    <section id="skills" ref={sectionRef} className="py-20 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
+        <div className={`text-center mb-16 transition-all duration-1000 ${
+          isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+        }`}>
           <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">Skills & Technologies</h2>
           <p className="text-lg text-gray-600 max-w-3xl mx-auto">
             My technical expertise spans across various technologies and platforms, 
@@ -85,14 +113,16 @@ const Skills = () => {
         </div>
 
         {/* Tabbed Skills Section */}
-        <div className="mb-16">
+        <div className={`mb-16 transition-all duration-1000 delay-300 ${
+          isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+        }`}>
           {/* Tab Navigation */}
           <div className="flex flex-wrap justify-center mb-8 bg-gray-100 rounded-xl p-2 max-w-4xl mx-auto">
             {tabs.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center justify-center space-x-2 px-4 sm:px-6 py-3 rounded-lg font-medium transition-all duration-300 flex-1 sm:flex-none min-w-0 ${
+                className={`flex items-center justify-center space-x-2 px-4 sm:px-6 py-3 rounded-lg font-medium transition-all duration-300 flex-1 sm:flex-none min-w-0 transform ${
                   activeTab === tab.id
                     ? 'bg-blue-600 text-white shadow-md transform scale-105'
                     : 'text-gray-600 hover:text-gray-900 hover:bg-gray-200 hover:scale-102'
@@ -113,8 +143,12 @@ const Skills = () => {
               {tabs[activeTab].skills.map((skill, index) => (
                 <div
                   key={index}
-                  className="bg-white rounded-lg p-6 shadow-sm hover:shadow-md transition-all duration-300 border border-gray-200 transform hover:scale-105 animate-fadeInUp"
-                  style={{ animationDelay: `${index * 100}ms` }}
+                  className={`bg-white rounded-lg p-6 shadow-sm hover:shadow-md transition-all duration-500 border border-gray-200 transform hover:scale-105 ${
+                    isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+                  }`}
+                  style={{ 
+                    transitionDelay: isVisible ? `${600 + index * 150}ms` : '0ms'
+                  }}
                 >
                   <div className="flex items-start space-x-4">
                     <div className="w-3 h-3 bg-blue-600 rounded-full mt-2 flex-shrink-0"></div>
@@ -130,13 +164,20 @@ const Skills = () => {
         </div>
 
         {/* Tools & Technologies */}
-        <div>
+        <div className={`transition-all duration-1000 delay-700 ${
+          isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+        }`}>
           <h3 className="text-2xl font-semibold text-gray-900 mb-8 text-center">Tools & Technologies</h3>
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-6">
             {tools.map((tool, index) => (
               <div
                 key={index}
-                className="flex flex-col items-center p-4 bg-white border border-gray-200 rounded-xl hover:shadow-md transition-shadow duration-200 group"
+                className={`flex flex-col items-center p-4 bg-white border border-gray-200 rounded-xl hover:shadow-md transition-all duration-500 group transform ${
+                  isVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-4 scale-95'
+                }`}
+                style={{ 
+                  transitionDelay: isVisible ? `${1000 + index * 100}ms` : '0ms'
+                }}
               >
                 <div className={`${tool.color} group-hover:scale-110 transition-transform duration-200 mb-3`}>
                   {tool.icon}
