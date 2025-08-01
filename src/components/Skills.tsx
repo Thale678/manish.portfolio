@@ -15,6 +15,7 @@ import {
 const Skills = () => {
   const [activeTab, setActiveTab] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
+  const [animatedElements, setAnimatedElements] = useState<Set<number>>(new Set());
   const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -105,7 +106,11 @@ const Skills = () => {
         <div className={`text-center mb-16 transition-all duration-1000 ${
           isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
         }`}>
-          <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">Skills & Technologies</h2>
+          <h2 className={`text-3xl sm:text-4xl font-bold text-gray-900 mb-4 ${
+            isVisible ? 'animate-bounceIn' : 'opacity-0'
+          }`}>
+            Skills & Technologies
+          </h2>
           <p className="text-lg text-gray-600 max-w-3xl mx-auto">
             My technical expertise spans across various technologies and platforms, 
             with deep knowledge in middleware development and cloud solutions.
@@ -113,18 +118,20 @@ const Skills = () => {
         </div>
 
         {/* Tabbed Skills Section */}
-        <div className={`mb-16 transition-all duration-1000 delay-300 ${
-          isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+        <div className={`mb-16 ${
+          isVisible ? 'animate-slideInUp' : 'opacity-0'
         }`}>
           {/* Tab Navigation */}
-          <div className="flex flex-wrap justify-center mb-8 bg-gray-100 rounded-xl p-2 max-w-4xl mx-auto">
+          <div className={`flex flex-wrap justify-center mb-8 bg-gray-100 rounded-xl p-2 max-w-4xl mx-auto ${
+            isVisible ? 'animate-flipIn' : 'opacity-0'
+          }`} style={{ animationDelay: '0.3s' }}>
             {tabs.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
                 className={`flex items-center justify-center space-x-2 px-4 sm:px-6 py-3 rounded-lg font-medium transition-all duration-300 flex-1 sm:flex-none min-w-0 transform ${
                   activeTab === tab.id
-                    ? 'bg-blue-600 text-white shadow-md transform scale-105'
+                    ? 'bg-blue-600 text-white shadow-md transform scale-105 tab-glow'
                     : 'text-gray-600 hover:text-gray-900 hover:bg-gray-200 hover:scale-102'
                 }`}
               >
@@ -138,20 +145,26 @@ const Skills = () => {
           <div className="bg-gray-50 rounded-xl p-6 sm:p-8 overflow-hidden">
             <div 
               key={activeTab}
-              className="grid grid-cols-1 md:grid-cols-2 gap-6 animate-slideIn"
+              className="grid grid-cols-1 md:grid-cols-2 gap-6"
             >
               {tabs[activeTab].skills.map((skill, index) => (
                 <div
                   key={index}
-                  className={`bg-white rounded-lg p-6 shadow-sm hover:shadow-md transition-all duration-500 border border-gray-200 transform hover:scale-105 ${
-                    isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+                  className={`bg-white rounded-lg p-6 shadow-sm border border-gray-200 skill-card-hover ${
+                    isVisible 
+                      ? index % 2 === 0 
+                        ? 'animate-slideInLeft' 
+                        : 'animate-slideInRight'
+                      : 'opacity-0'
                   }`}
                   style={{ 
-                    transitionDelay: isVisible ? `${600 + index * 150}ms` : '0ms'
+                    animationDelay: isVisible ? `${0.6 + index * 0.15}s` : '0ms'
                   }}
                 >
                   <div className="flex items-start space-x-4">
-                    <div className="w-3 h-3 bg-blue-600 rounded-full mt-2 flex-shrink-0"></div>
+                    <div className={`w-3 h-3 bg-blue-600 rounded-full mt-2 flex-shrink-0 ${
+                      isVisible ? 'animate-pulse' : ''
+                    }`} style={{ animationDelay: `${1 + index * 0.1}s` }}></div>
                     <div className="flex-1">
                       <h4 className="text-lg font-semibold text-gray-900 mb-2">{skill.name}</h4>
                       <p className="text-gray-600 text-sm leading-relaxed">{skill.description}</p>
@@ -164,25 +177,35 @@ const Skills = () => {
         </div>
 
         {/* Tools & Technologies */}
-        <div className={`transition-all duration-1000 delay-700 ${
-          isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+        <div className={`${
+          isVisible ? 'animate-slideInUp' : 'opacity-0'
         }`}>
-          <h3 className="text-2xl font-semibold text-gray-900 mb-8 text-center">Tools & Technologies</h3>
+          <h3 className={`text-2xl font-semibold text-gray-900 mb-8 text-center ${
+            isVisible ? 'animate-zoomInRotate' : 'opacity-0'
+          }`} style={{ animationDelay: '0.7s' }}>
+            Tools & Technologies
+          </h3>
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-6">
             {tools.map((tool, index) => (
               <div
                 key={index}
-                className={`flex flex-col items-center p-4 bg-white border border-gray-200 rounded-xl hover:shadow-md transition-all duration-500 group transform ${
-                  isVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-4 scale-95'
+                className={`flex flex-col items-center p-4 bg-white border border-gray-200 rounded-xl hover:shadow-lg transition-all duration-500 group cursor-pointer ${
+                  isVisible ? 'animate-bounceIn animate-float' : 'opacity-0'
                 }`}
                 style={{ 
-                  transitionDelay: isVisible ? `${1000 + index * 100}ms` : '0ms'
+                  animationDelay: isVisible ? `${1 + index * 0.1}s` : '0ms',
+                  animationDuration: `${3 + (index % 3)}s`
+                }}
+                onMouseEnter={() => {
+                  setAnimatedElements(prev => new Set([...prev, index]));
                 }}
               >
-                <div className={`${tool.color} group-hover:scale-110 transition-transform duration-200 mb-3`}>
+                <div className={`${tool.color} group-hover:scale-125 group-hover:rotate-12 transition-all duration-300 mb-3 ${
+                  animatedElements.has(index) ? 'animate-pulse' : ''
+                }`}>
                   {tool.icon}
                 </div>
-                <span className="text-sm font-medium text-gray-700 text-center">
+                <span className="text-sm font-medium text-gray-700 text-center group-hover:text-blue-600 transition-colors duration-200">
                   {tool.name}
                 </span>
               </div>
