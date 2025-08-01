@@ -177,7 +177,7 @@ const Skills = () => {
         </div>
 
         {/* Tools & Technologies */}
-        <div className={`${
+        <div className={`mb-8 ${
           isVisible ? 'animate-slideInUp' : 'opacity-0'
         }`}>
           <h3 className={`text-2xl font-semibold text-gray-900 mb-8 text-center ${
@@ -185,12 +185,18 @@ const Skills = () => {
           }`} style={{ animationDelay: '0.7s' }}>
             Tools & Technologies
           </h3>
+        </div>
+        
+        {/* Tools Grid with 3D Flip Animation */}
+        <div className={`${
+          isVisible ? 'animate-slideInUp' : 'opacity-0'
+        }`}>
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-6">
             {tools.map((tool, index) => (
               <div
                 key={index}
-                className={`flex flex-col items-center p-4 bg-white border border-gray-200 rounded-xl hover:shadow-lg transition-all duration-500 group cursor-pointer ${
-                  isVisible ? 'animate-bounceIn animate-float' : 'opacity-0'
+                className={`flex flex-col items-center p-4 bg-white border border-gray-200 rounded-xl hover:shadow-lg transition-all duration-500 group cursor-pointer skill-card-hover ${
+                  isVisible ? 'animate-flipIn animate-float' : 'opacity-0'
                 }`}
                 style={{ 
                   animationDelay: isVisible ? `${1 + index * 0.1}s` : '0ms',

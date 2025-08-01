@@ -1,7 +1,34 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { CheckCircle, Code, Server, Cloud, Database } from 'lucide-react';
 
 const About = () => {
+  const [isVisible, setIsVisible] = useState(false);
+  const sectionRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+        }
+      },
+      {
+        threshold: 0.1,
+        rootMargin: '0px 0px -100px 0px'
+      }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => {
+      if (sectionRef.current) {
+        observer.unobserve(sectionRef.current);
+      }
+    };
+  }, []);
+
   const highlights = [
     "6+ years of IT experience in full lifecycle software development",
     "Skilled in Spring Boot, microservices, REST APIs, CI/CD pipelines, and AWS",
@@ -34,17 +61,23 @@ const About = () => {
   ];
 
   return (
-    <section id="about" className="py-20 bg-white">
+    <section id="about" ref={sectionRef} className="py-20 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">About Me</h2>
+        <div className={`text-center mb-16 transition-all duration-1000 ${
+          isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+        }`}>
+          <h2 className={`text-3xl sm:text-4xl font-bold text-gray-900 mb-4 ${
+            isVisible ? 'animate-bounceIn' : 'opacity-0'
+          }`}>About Me</h2>
           <p className="text-lg text-gray-600 max-w-3xl mx-auto">
             I'm a passionate Middleware Developer with extensive experience in building 
             scalable enterprise solutions and integration platforms.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
+        <div className={`grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16 ${
+          isVisible ? 'animate-slideInUp' : 'opacity-0'
+        }`}>
           {/* Professional Summary */}
           <div className="space-y-6">
             <h3 className="text-2xl font-semibold text-gray-900 mb-6">Professional Summary</h3>
@@ -84,10 +117,20 @@ const About = () => {
 
         {/* Expertise Areas */}
         <div>
-          <h3 className="text-2xl font-semibold text-gray-900 mb-8 text-center">Areas of Expertise</h3>
+          <h3 className={`text-2xl font-semibold text-gray-900 mb-8 text-center ${
+            isVisible ? 'animate-zoomInRotate' : 'opacity-0'
+          }`} style={{ animationDelay: '0.5s' }}>Areas of Expertise</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {expertise.map((area, index) => (
-              <div key={index} className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow duration-200">
+              <div 
+                key={index} 
+                className={`bg-white border border-gray-200 rounded-xl p-6 shadow-sm hover:shadow-md transition-all duration-500 skill-card-hover ${
+                  isVisible ? 'animate-flipIn' : 'opacity-0'
+                }`}
+                style={{ 
+                  animationDelay: isVisible ? `${0.7 + index * 0.2}s` : '0ms'
+                }}
+              >
                 <div className="mb-4">{area.icon}</div>
                 <h4 className="text-lg font-semibold text-gray-900 mb-2">{area.title}</h4>
                 <p className="text-gray-600 text-sm leading-relaxed">{area.description}</p>
