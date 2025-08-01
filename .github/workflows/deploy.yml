@@ -1,0 +1,53 @@
+# Name for the workflow
+name: Build and Deploy to GitHub Pages
+
+# Run this workflow on pushes to the main branch
+on:
+  push:
+    branches:
+      - main
+
+# Set permissions for the job to allow deployment
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Define the deployment job
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      # Step 1: Check out your repository's code
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Step 2: Set up Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18 # Or your preferred Node.js version
+          cache: 'npm'
+
+      # Step 3: Install dependencies
+      - name: Install dependencies
+        run: npm install
+
+      # Step 4: Build the project (This is the crucial step)
+      - name: Build
+        run: npm run build # This command compiles your .tsx files into a 'dist' folder
+
+      # Step 5: Prepare the artifact for deployment
+      - name: Setup Pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          # Upload the 'dist' directory created by the build step
+          path: './dist'
+
+      # Step 6: Deploy to GitHub Pages
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
