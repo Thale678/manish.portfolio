@@ -55,7 +55,7 @@ const Contact = () => {
       icon: <Linkedin className="h-6 w-6" />,
       label: "LinkedIn",
       value: "Connect with me",
-      link: "www.linkedin.com/in/manish-thale-6b738297"
+      link: "https://www.linkedin.com/in/manish-thale-6b738297/"
     }
   ];
 
@@ -123,7 +123,7 @@ const Contact = () => {
                   → Discuss Project Collaboration
                 </a>
                 <a
-                  href="www.linkedin.com/in/manish-thale-6b738297"
+                  href="https://www.linkedin.com/in/manish-thale-6b738297/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="block text-blue-600 hover:text-blue-700 transition-colors duration-200"

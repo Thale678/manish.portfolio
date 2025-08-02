@@ -88,7 +88,7 @@ const Hero = () => {
                 Get In Touch
               </button>
               <a
-                href="www.linkedin.com/in/manish-thale-6b738297"
+                href="https://www.linkedin.com/in/manish-thale-6b738297/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center justify-center space-x-2 border-2 border-gray-300 text-gray-700 px-8 py-3 rounded-lg font-semibold hover:border-gray-400 hover:bg-gray-50 transition-colors duration-200"
