@@ -19,8 +19,18 @@ const Contact = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // In a real implementation, this would send the form data to a backend
-    console.log('Form submitted:', formData);
+    
+    // Create mailto URL with form data
+    const subject = encodeURIComponent(formData.subject);
+    const body = encodeURIComponent(
+      `Hi Manish,\n\n${formData.message}\n\nBest regards,\n${formData.name}\n\nContact Details:\nEmail: ${formData.email}\nName: ${formData.name}`
+    );
+    const mailtoUrl = `mailto:thale678.ht@gmail.com?subject=${subject}&body=${body}`;
+    
+    // Open mail app
+    window.location.href = mailtoUrl;
+    
+    // Show success message and reset form
     setIsSubmitted(true);
     setTimeout(() => setIsSubmitted(false), 5000);
     setFormData({ name: '', email: '', subject: '', message: '' });
